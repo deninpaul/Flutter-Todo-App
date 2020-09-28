@@ -39,6 +39,8 @@ class _NewTodoFormState extends State<NewTodoForm> {
                 padding: EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: titleController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                   style: TextStyle(color: blue, fontWeight: FontWeight.w500),
                   cursorColor: blue,
                   decoration: InputDecoration(

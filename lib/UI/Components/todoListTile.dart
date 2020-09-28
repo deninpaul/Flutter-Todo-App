@@ -66,7 +66,7 @@ class _TodoListTileState extends State<TodoListTile> {
                           style: titleStyle(),
                         ),
                       SizedBox(
-                        height: 2,
+                        height: 3,
                       ),
                       if (widget.entry.description != null)
                         Text(
@@ -101,6 +101,7 @@ class _TodoListTileState extends State<TodoListTile> {
         fontFamily: primaryFont,
         fontSize: 16,
         color: blue,
+        height: 1.3,
         decoration: widget.entry.done == 1
             ? TextDecoration.lineThrough
             : TextDecoration.none,

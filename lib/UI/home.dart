@@ -90,12 +90,13 @@ class TodoEntryList extends StatefulWidget {
 
 class _TodoEntryListState extends State<TodoEntryList> {
   List<Widget> list;
+  var db = DBProvider.db;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: DBProvider.db.getAllTodoEntries(),
+        future: db.getAllTodoEntries(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView(
@@ -132,7 +133,7 @@ class _TodoEntryListState extends State<TodoEntryList> {
 
   listUpdator() {
     setState(() {
-      DBProvider.db.getAllTodoEntries();
+      db.getAllTodoEntries();
     });
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-Color white = Colors.white;
-Color black = Color(0xFF444444);
+Color lightGray = Color(0xFFF6F6F9);
 Color blue = Color(0xFF2962FF);
-Color lightgrey = Color(0xF6F6F9);
-Color shadowColor = Color(0x14555555);
+Color darkGray = Color(0x1A434343);
+Color black = Color(0xFF434343);
+Color white = Colors.white;
 
 String primaryFont = 'Poppins';
-

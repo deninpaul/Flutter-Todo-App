@@ -1,148 +1,113 @@
+import 'package:DSCtodo/UI/Utils/global.dart';
+import 'package:DSCtodo/UI/Utils/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:todo/Data/model.dart';
-import 'package:todo/Services/database.dart';
-import 'package:todo/UI/Components/viewDialog.dart';
-import 'package:todo/UI/Utils/global.dart';
-import 'package:todo/UI/Utils/theme.dart';
 
 class TodoListTile extends StatefulWidget {
-  final TodoEntry entry;
-  final VoidCallback listUpdator;
-
-  TodoListTile({Key key, this.entry, this.listUpdator}) : super(key: key);
+  TodoListTile({Key key}) : super(key: key);
 
   @override
   _TodoListTileState createState() => _TodoListTileState();
 }
 
 class _TodoListTileState extends State<TodoListTile> {
-  double diameter = 28;
+  final double diameter = 30;
+  bool done = false;
+  String title = "Take Medicine";
+  String description = "Hello World baaa baa ba baaaaaaaaaa";
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12, left: 26, right: 26),
-      decoration: BoxDecoration(
+      margin: EdgeInsets.fromLTRB(26, 0, 26, 12),
+      padding: EdgeInsets.fromLTRB(24, 16, 0, 16),
+      decoration: new BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.all(Radius.circular(4)),
         boxShadow: [
           BoxShadow(
-            color: widget.entry.done == 1 ? lightgrey : shadowColor,
-            blurRadius: 8.0,
+            color: darkGray,
+            blurRadius: 12,
             offset: Offset(0, 3),
-          )
+          ),
         ],
       ),
-      child: FlatButton(
-        color: white,
-        onPressed: () {
-          showDialog(
-            context: context,
-            child: UpdateTodoForm(
-              entry: widget.entry,
-              listUpdator: widget.listUpdator,
-            ),
-          );
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-        padding: EdgeInsets.zero,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 24, top: 22, bottom: 22),
-                child: AnimatedOpacity(
-                  opacity: widget.entry.done == 1 ? 0.3 : 1.0,
-                  duration: Duration(milliseconds: 200),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (widget.entry.title != null)
-                        Text(
-                          widget.entry.title,
-                          style: titleStyle(),
-                        ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      if (widget.entry.description != null)
-                        Text(
-                          widget.entry.description,
-                          style: bodyStyle(),
-                        ),
-                    ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: AnimatedOpacity(
+              opacity: !done ? 1 : 0.4,
+              duration: Duration(milliseconds: 150),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      decoration: done
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      color: blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 3.5,
+                  ),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      decoration: done
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontSize: 12,
+                      color: black,
+                    ),
+                  ),
+                ],
               ),
             ),
-            FlatButton(
-              child: widget.entry.done == 1 ? circleOn() : circleOff(),
-              splashColor: white,
-              focusColor: white,
-              onPressed: () {
-                setState(() {
-                  widget.entry.done = widget.entry.done == 1 ? 0 : 1;
-                  DBProvider.db.updateTodoEntry(widget.entry);
-                  widget.listUpdator();
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+          FlatButton(
+            onPressed: () {
+              setState(() {
+                done = !done;
+              });
+            },
+            child: done ? circleDone() : circleNotDone(),
+          ),
+        ],
       ),
     );
   }
 
-  titleStyle() {
-    return TextStyle(
-        fontFamily: primaryFont,
-        fontSize: 16,
-        color: blue,
-        height: 1.3,
-        decoration: widget.entry.done == 1
-            ? TextDecoration.lineThrough
-            : TextDecoration.none,
-        fontWeight: FontWeight.w600);
-  }
-
-  bodyStyle() {
-    return TextStyle(
-        fontFamily: primaryFont,
-        fontSize: 11.5,
-        color: black,
-        height: 1.5,
-        decoration: widget.entry.done == 1
-            ? TextDecoration.lineThrough
-            : TextDecoration.none,
-        fontWeight: FontWeight.w400);
-  }
-
-  circleOn() {
+  circleNotDone() {
     return Container(
-      width: diameter,
       height: diameter,
-      padding: EdgeInsets.all(7),
+      width: diameter,
+      margin: EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: blue,
         shape: BoxShape.circle,
+        border: Border.all(color: blue, width: 2),
       ),
-      child: Image.asset(tickAssetPath),
     );
   }
 
-  circleOff() {
+  circleDone() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: Container(
-        width: diameter,
-        height: diameter,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(width: 2.5, color: blue),
-        ),
+      height: diameter,
+      width: diameter,
+      margin: EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: blue,
+      ),
+      child: Image.asset(
+        tickImagePath,
       ),
     );
   }

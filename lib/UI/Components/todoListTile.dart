@@ -1,9 +1,14 @@
+import 'package:DSCtodo/Data/todoListClass.dart';
+import 'package:DSCtodo/Services/localDatabase.dart';
 import 'package:DSCtodo/UI/Utils/global.dart';
 import 'package:DSCtodo/UI/Utils/theme.dart';
+import 'package:DSCtodo/UI/home.dart';
 import 'package:flutter/material.dart';
 
 class TodoListTile extends StatefulWidget {
-  TodoListTile({Key key}) : super(key: key);
+  TodoListTile({this.entry, Key key}) : super(key: key);
+
+  final TodoEntry entry;
 
   @override
   _TodoListTileState createState() => _TodoListTileState();
@@ -11,9 +16,7 @@ class TodoListTile extends StatefulWidget {
 
 class _TodoListTileState extends State<TodoListTile> {
   final double diameter = 30;
-  bool done = false;
-  String title = "Take Medicine";
-  String description = "Hello World baaa baa ba baaaaaaaaaa";
+  var db = DBProvider.db;
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +40,16 @@ class _TodoListTileState extends State<TodoListTile> {
         children: [
           Expanded(
             child: AnimatedOpacity(
-              opacity: !done ? 1 : 0.4,
+              opacity: widget.entry.done == 1 ? 0.4 : 1,
               duration: Duration(milliseconds: 150),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.entry.title == null ? " " : widget.entry.title,
                     style: TextStyle(
-                      decoration: done
+                      decoration: widget.entry.done == 1
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                       color: blue,
@@ -58,9 +61,11 @@ class _TodoListTileState extends State<TodoListTile> {
                     height: 3.5,
                   ),
                   Text(
-                    description,
+                    widget.entry.description == null
+                        ? " "
+                        : widget.entry.description,
                     style: TextStyle(
-                      decoration: done
+                      decoration: widget.entry.done == 1
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                       fontSize: 12,
@@ -74,10 +79,14 @@ class _TodoListTileState extends State<TodoListTile> {
           FlatButton(
             onPressed: () {
               setState(() {
-                done = !done;
+                widget.entry.done = widget.entry.done == 1 ? 0 : 1;
+                db.updateTodoEntry(widget.entry);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (route) => false);
               });
             },
-            child: done ? circleDone() : circleNotDone(),
+            child: widget.entry.done == 1 ? circleDone() : circleNotDone(),
           ),
         ],
       ),

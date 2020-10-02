@@ -1,9 +1,12 @@
+import 'package:DSCtodo/Data/todoListClass.dart';
+import 'package:DSCtodo/Services/localDatabase.dart';
+import 'package:DSCtodo/UI/Components/newTodoDialog.dart';
 import 'package:DSCtodo/UI/Components/todoListTile.dart';
 import 'package:flutter/material.dart';
 import 'Utils/theme.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key key}) : super(key: key);
+  Home({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +45,19 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: customFAB(),
+      floatingActionButton: customFAB(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  customFAB() {
+  customFAB(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("I am a button");
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return NewTodoDialog();
+            });
       },
       child: Container(
         height: 64,
@@ -94,16 +101,31 @@ class TodoListTiles extends StatefulWidget {
 }
 
 class _TodoListTilesState extends State<TodoListTiles> {
+  var db = DBProvider.db;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 28),
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemCount: 10,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return TodoListTile();
+      child: FutureBuilder(
+        future: db.getAllTodoEntries(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<TodoEntry>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: snapshot.data.length,
+              shrinkWrap: true,
+              reverse: true,
+              itemBuilder: (context, index) {
+                return TodoListTile(
+                  entry: snapshot.data[index],
+                );
+              },
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
         },
       ),
     );

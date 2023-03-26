@@ -1,16 +1,9 @@
-# todo
+# Flutter Todo App
 
-A new Flutter project.
+This repository contains the source code for the Todo App created during the DSC MEC Flutter Bootcamp conducted in October 2020. It is a beginner-friendly app with simple functionalities built using Flutter. The app features local database capabilities powered by SQLite. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> Click the links below to view the recordings of the 3-day workshop session:
+> 
+> - [Day 1 - DSC MEC Flutter Bootcamp](https://www.youtube.com/watch?v=O7TjLObBbdQ)
+> - [Day 2 - DSC MEC Flutter Bootcamp](https://www.youtube.com/watch?v=arwHWCOA7Ng)
+> - [Day 3 - DSC MEC Flutter Bootcamp](https://www.youtube.com/watch?v=hjrJtOUF5oo)
